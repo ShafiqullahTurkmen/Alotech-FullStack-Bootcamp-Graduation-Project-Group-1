@@ -14,20 +14,8 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoute);
 
-//db User
-const User = db.User;
-app.post("/", async (req, res) => {
-  const { name, email } = req.body;
-  console.log("test 1");
-  const newUser = await User.create({ name, email });
-  console.log("test 2");
-
-  res.json({ newUser });
-});
-
 const PORT = process.env.PORT || 3000;
-
-db.sequelize.sync().then(() => {
+db.sequelize.sync({force: false}).then(() => {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });
