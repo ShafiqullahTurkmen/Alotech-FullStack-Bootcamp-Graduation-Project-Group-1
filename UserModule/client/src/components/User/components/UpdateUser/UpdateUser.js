@@ -2,11 +2,11 @@ import {useState} from 'react';
 
 function UpdateUser({user}){
     const [username, setUsername] = useState(user.username);
-    const [name, setName] = useState(user.name);
-    const [surname, setSurname] = useState(user.surname);
-    const [email, setEmail] = useState(user.email);
-    const [role, setRole] = useState(user.role);
-    const [password, setPassword] = useState(user.password);
+    const [name, setName] = useState(user.user_name);
+    const [surname, setSurname] = useState(user.user_surname);
+    const [email, setEmail] = useState(user.user_email);
+    const [role, setRole] = useState(user.user_type);
+    const [password, setPassword] = useState(user.user_password);
 
     function handleSubmit(e) {
         e.preventDefault();

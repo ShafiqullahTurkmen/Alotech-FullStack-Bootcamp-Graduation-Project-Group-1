@@ -1,4 +1,18 @@
-function DeleteUser({user}){
+import axios from 'axios';
+const apiUrl = 'http://localhost:9000';
+
+function DeleteUser({user, setPosted}) {
+    function deleteUser(e, id){
+        axios.delete(apiUrl + `/users/${id}`)
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+        setPosted(true);
+    }
+
     return(
         <>
         <button type="button" className="btn btn-outline-info btn-circle btn-lg btn-circle" data-bs-toggle="modal" data-bs-target={`#deleteUserModal${user.id}`}>
@@ -16,7 +30,7 @@ function DeleteUser({user}){
                 </div>
                 <div className="modal-footer">
                     <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" className="btn btn-danger">Delete</button>
+                    <button type="button" className="btn btn-danger" onClick={(e) => deleteUser(e, user.id)}>Delete</button>
                 </div>
                 </div>
             </div>

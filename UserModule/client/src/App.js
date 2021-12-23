@@ -1,41 +1,24 @@
+import {useState, useEffect} from 'react';
+import axios from 'axios';
 import User from './components/User';
 import AddUser from './components/AddUser';
-const user = [{
-  id: 1,
-  username: 'coskunatak',
-  name: 'Coşkun',
-  surname: 'Atak',
-  password: '123456',
-  email: 'coskntkk@mail.com',
-  role: 'Admin'
-},{
-  id: 2,
-  username: 'shafiqullahturkmen',
-  name: 'Shafiqullah',
-  surname: 'Türkmen',
-  password: '123456',
-  email: 'shafiqullah@mail.com',
-  role: 'Admin'
-},{
-  id: 3,
-  username: 'nurullahkucuk',
-  name: 'Nurullah',
-  surname: 'Küçük',
-  password: '123456',
-  email: 'nurullah@mail.com',
-  role: 'Admin'
-},{
-  id: 4,
-  username: 'oguzhanbayram',
-  name: 'Oğuzhan',
-  surname: 'Bayram',
-  password: '123456',
-  email: 'oguzhan@mail.com',
-  role: 'Admin'
-},
-]
+const apiUrl = 'http://localhost:9000';
 
 function App() {
+  const [users, setUsers] = useState([]);
+  const [posted, setPosted] = useState(false);
+
+  useEffect(() => {
+    axios.get(`${apiUrl}/users`)
+      .then(res => {
+        setUsers(res.data.users);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      setPosted(false);
+  }, [posted]);
+
   return (
     <div className="App">
       <div className="container">
@@ -44,7 +27,7 @@ function App() {
             <div className="card">
               <div className="card-body d-flex justify-content-between manage-head">
                 <h5 className="card-title text-uppercase mb-0">Manage Users</h5>
-                <AddUser />
+                <AddUser posted={posted} setPosted={setPosted} />
               </div>
               <div className="table-responsive">
                 <table className="table no-wrap user-table mb-0">
@@ -60,8 +43,8 @@ function App() {
                     </tr>
                   </thead>
                   <tbody>
-                    {user.map(user => {
-                      return <User key={user.id} user={user} />
+                    {users.map(user => {
+                      return <User key={user.id} user={user} posted={posted} setPosted={setPosted} />
                     })}
                   </tbody>
                 </table>

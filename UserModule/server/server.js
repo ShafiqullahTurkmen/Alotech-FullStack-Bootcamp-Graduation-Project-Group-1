@@ -1,5 +1,5 @@
 const express = require("express");
-
+const cors = require('cors')
 const db = require("./models");
 const userRoute = require("./routes/userRoute");
 const app = express();
@@ -7,6 +7,7 @@ const app = express();
 //middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("test");

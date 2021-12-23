@@ -1,11 +1,13 @@
 import {useState} from 'react';
+import axios from 'axios';
+const apiUrl = 'http://localhost:9000';
 
-function AddUser() {
+function AddUser({posted, setPosted}) {
     const [username, setUsername] = useState();
     const [name, setName] = useState();
     const [surname, setSurname] = useState();
     const [email, setEmail] = useState();
-    const [role, setRole] = useState();
+    const [role, setRole] = useState("user");
     const [password, setPassword] = useState();
 
     function handleSubmit(e) {
@@ -19,6 +21,16 @@ function AddUser() {
             user_type: role,
         };
         console.log(data);
+        axios.post(`${apiUrl}/users`, data)
+            .then(res => {
+                console.log(res);
+                console.log(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+        e.target.reset();
+        setPosted(true);
     };
 
     return (
