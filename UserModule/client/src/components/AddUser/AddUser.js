@@ -11,12 +11,12 @@ function AddUser() {
     function handleSubmit(e) {
         e.preventDefault();
         const data = {
-            username,
-            name,
-            surname,
-            email,
-            role,
-            password,
+            username: username,
+            user_name: name,
+            user_surname: surname,
+            user_password: password,
+            user_email: email,
+            user_type: role,
         };
         console.log(data);
     };
