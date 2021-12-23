@@ -3,6 +3,7 @@ const apiUrl = 'http://localhost:9000';
 
 function DeleteUser({user, setPosted}) {
     function deleteUser(e, id){
+        e.preventDefault();
         axios.delete(apiUrl + `/users/${id}`)
         .then(res => {
             console.log(res.data);

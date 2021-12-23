@@ -1,6 +1,8 @@
 import {useState} from 'react';
+import axios from 'axios';
+const apiUrl = 'http://localhost:9000';
 
-function UpdateUser({user}){
+function UpdateUser({user, setPosted}) {
     const [username, setUsername] = useState(user.username);
     const [name, setName] = useState(user.user_name);
     const [surname, setSurname] = useState(user.user_surname);
@@ -8,17 +10,24 @@ function UpdateUser({user}){
     const [role, setRole] = useState(user.user_type);
     const [password, setPassword] = useState(user.user_password);
 
-    function handleSubmit(e) {
+    function handleSubmit(e, id) {
         e.preventDefault();
         const data = {
             username,
-            name,
-            surname,
-            email,
-            role,
-            password,
+            user_name: name,
+            user_surname: surname,
+            user_password: password,
+            user_email: email,
+            user_type: role
         };
-        console.log(data);
+        axios.put(apiUrl + `/users/${id}`, data)
+        .then(res => {
+            console.log(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
+        setPosted(true);
     };
 
     return(
@@ -29,7 +38,7 @@ function UpdateUser({user}){
         <div className="modal fade" id={`updateUserModal${user.id}`} data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" >
             <div className="modal-dialog">
                 <div className="modal-content">
-                    <form onSubmit={(e) => handleSubmit(e)}>
+                    <form onSubmit={(e) => handleSubmit(e, user.id)}>
                         <div className="modal-header">
                             <h5 className="modal-title">Add User</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
