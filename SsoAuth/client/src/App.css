@@ -1,0 +1,88 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.container{
+  background: linear-gradient(135deg,#0c5985,#07f8bc);
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.app-wrapper{
+  background-color: #fff;
+  min-width: 350px;
+  min-height: 500px;
+  padding: 30px;
+  box-sizing: border-box;
+  border-radius: 5px;
+}
+
+.title{
+  color: #f80759;
+  text-align: center;
+  margin: 80px 0 40px 0;
+}
+
+.name,.username,.password{
+  margin: 20px;
+  color: #969292;
+  font-size: 16px;
+}
+
+.password{
+  margin-bottom: 40px;
+}
+.input{
+  height: 32px;
+  font-size: 20px;
+  outline: none;
+  width: 100%;
+  border-top-style: none;
+  border-left-style: none;
+  border-right-style: none;
+  border-bottom-style: 2px solid black;
+  margin-bottom: 10px;
+}
+
+.error{
+  color: red;
+}
+
+.submit{
+  display: flex;
+  text-transform: uppercase;
+  font-size: 20px;
+  border-radius: 25px;
+  color: white;
+  padding: 10px 60px;
+  background: linear-gradient(to right, #ab1dcf,#f80759);
+  box-shadow: rgba(0,0,0,0.3) 0px 19px 39px,
+  rgba(0,0,0,0.2) 0px 15px 12px;
+  margin: auto;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+button:active{
+  transform: translateY(2px);
+}
+
+.form-success{
+  display: flex;
+  justify-content: center;
+  margin-top: 250px;
+  min-width: 370px;
+  color: #f80759;
+}
+
+
+
+
+
+
