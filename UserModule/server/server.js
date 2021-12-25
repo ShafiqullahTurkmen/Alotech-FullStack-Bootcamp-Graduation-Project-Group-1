@@ -1,6 +1,6 @@
-require('dotenv').config();
+require("dotenv").config();
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 const db = require("./models");
 const userRoute = require("./routes/userRoute");
 const app = express();
@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 app.use("/users", userRoute);
 
 const PORT = process.env.PORT || 9000;
-db.sequelize.sync({force: false}).then(() => {
+db.sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });

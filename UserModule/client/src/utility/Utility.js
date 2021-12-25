@@ -1,18 +1,18 @@
 import Cookies from "universal-cookie";
 
-//"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-
-export function setToken(key = "token", token) {
+export function setToken(token, key = "access_token") {
   const cookies = new Cookies();
   cookies.set(key, token, { path: "/" });
 }
 
-export function getToken(key = "token") {
+export function getToken(key = "access_token") {
   const cookies = new Cookies();
   return cookies.get(key);
 }
 
-export function resetToken(key = "token") {
+export function resetToken(key = "access_token") {
   const cookies = new Cookies();
+  setToken(undefined);
   cookies.remove(key);
+  window.location.href = "http://127.0.0.1:3005";
 }
