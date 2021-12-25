@@ -15,7 +15,6 @@ const loginUser = async (req, res) => {
       replacements: { _username: username },
     }
   );
-
   if (user.length && user[0].username === username) {
     const loginUser = user[0];
 
@@ -31,7 +30,7 @@ const loginUser = async (req, res) => {
       console.log(loginUser);
 
       //JWT
-      time_to_live = "60s"; // 30 saniye
+      time_to_live = "30s"; // 30 saniye
 
       const token = jwt.sign(
         { id: user_id, username: loginUsername },
@@ -42,16 +41,20 @@ const loginUser = async (req, res) => {
       const data = jwt.verify(token, process.env.JWT_SECRET);
       const { exp } = data;
 
-      //token expire date
-      var d = new Date(exp * 1000);
+      //
+      //token has one day to expire
+      var d = new Date(exp * 1000 + (3 * 60 * 60 * 1000));
       const expires = d.toString();
       console.log(d.toString(), "//token expire date");
 
-      let ip = requesIp.getClientIp(req); // gets ip
-      console.log(ip);
+      let user_ip = requesIp.getClientIp(req); // gets ip
+      console.log(user_ip);
 
-      const createdAt = new Date(Date.now());
+      const createdAt = new Date(Date.now() + (3 * 60 * 60 * 1000));
       console.log(createdAt, "created At");
+
+      //dummy string, for test
+      const source_url = "Sso Consumer Url";
 
       // Create Token instance in Token Table
       const tokenTableRow = async () => {
@@ -60,20 +63,27 @@ const loginUser = async (req, res) => {
           expires,
           createdAt,
           time_to_live,
-          ip,
+          user_ip,
+          source_url,
         });
         return tokenrow;
       };
 
-      console.log(tokenTableRow());
+      tokenTableRow();
 
-      //cannot set another url's cookie
-      res.status(200).json({ url: "http://127.0.0.1:3005", token: token });
+      // store token in cookie
+      res
+        .cookie("access_token", token, {
+          httpOnly: true,
+          secure: false,
+        })
+        .status(200)
+        .redirect("http://localhost:5000"); // return url after
     } else {
-      res.json({ msg: "Wrong password" });
+      res.json({ msg: "Wrong password"});
     }
   } else {
-    res.json({ msg: "User not found" });
+    res.json({ msg: "User not found"});
   }
 };
 

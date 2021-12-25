@@ -1,0 +1,22 @@
+{
+  "name": "sso-consumer-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "mysql2": "^2.3.3",
+    "sequelize": "^7.0.0-alpha.2",
+    "sequelize-cli": "^6.3.0",
+    "dotenv": "^10.0.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5"
+
+  }
+}
