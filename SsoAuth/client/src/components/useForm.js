@@ -24,14 +24,20 @@ const useForm = (submitForm) => {
     //setErrors(Validation(values));
     setDataIsCorrect(true);
 
+    const url_query = new URLSearchParams(window.location.search).get(
+      "redirectURL"
+    );
+
     const data = {
       username: values.username,
       user_password: values.password,
+      redirectURL: url_query,
     };
 
     axios
       .post(`${apiUrl}/auth`, data)
       .then((res) => {
+        //console.log(res.data);
         window.location.href = `${res.data.url}?token=${res.data.token}`;
       })
       .catch((err) => {

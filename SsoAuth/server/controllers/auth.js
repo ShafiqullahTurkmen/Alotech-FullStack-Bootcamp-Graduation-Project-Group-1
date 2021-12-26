@@ -7,7 +7,8 @@ const Token = db.Token;
 const sequelize = db.sequelize;
 
 const loginUser = async (req, res) => {
-  const { username, user_password } = req.body;
+  const { username, user_password, redirectURL } = req.body;
+  console.log("url: " + redirectURL);
 
   const [user, meta] = await sequelize.query(
     "SELECT * FROM users WHERE username = :_username",
@@ -43,14 +44,14 @@ const loginUser = async (req, res) => {
 
       //
       //token has one day to expire
-      var d = new Date(exp * 1000 + (3 * 60 * 60 * 1000));
+      var d = new Date(exp * 1000 + 3 * 60 * 60 * 1000);
       const expires = d.toString();
       console.log(d.toString(), "//token expire date");
 
       let user_ip = requesIp.getClientIp(req); // gets ip
       console.log(user_ip);
 
-      const createdAt = new Date(Date.now() + (3 * 60 * 60 * 1000));
+      const createdAt = new Date(Date.now() + 3 * 60 * 60 * 1000);
       console.log(createdAt, "created At");
 
       //dummy string, for test
@@ -72,18 +73,12 @@ const loginUser = async (req, res) => {
       tokenTableRow();
 
       // store token in cookie
-      res
-        .cookie("access_token", token, {
-          httpOnly: true,
-          secure: false,
-        })
-        .status(200)
-        .redirect("http://localhost:5000"); // return url after
+      res.status(200).json({ url: redirectURL, token: token });
     } else {
-      res.json({ msg: "Wrong password"});
+      res.json({ msg: "Wrong password" });
     }
   } else {
-    res.json({ msg: "User not found"});
+    res.json({ msg: "User not found" });
   }
 };
 

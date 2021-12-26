@@ -40,11 +40,28 @@ function App() {
     console.log(token);
 
     if (!token || token === undefined || token === "undefined") {
-      const currentURL = window.location.href;
+      const currentURL = window.location.origin;
       window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
     } else {
-      // SSO isAccessTokenValid(token) çağrılır
-      // Expire olmuş ise query ile gönderilir ?
+      axios
+        .get(`${authUrl}/auth/token`, {
+          //isAccessTokenValid(token)
+          withCredentials: true,
+        })
+        .then((res) => {
+          if (res.data.status === "error") {
+            resetToken();
+            const currentURL = window.location.origin;
+            window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+          } else {
+            console.log("test");
+          }
+        })
+        .catch((err) => {
+          console.log("error: " + err);
+          const currentURL = window.location.origin;
+          window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+        });
     }
   }, []);
 
@@ -56,7 +73,7 @@ function App() {
             <Button
               variant="warning"
               onClick={resetToken}
-              style={{ "margin-bottom": "15px" }}
+              style={{ marginBottom: "15px" }}
             >
               Reset Token (test)
             </Button>
