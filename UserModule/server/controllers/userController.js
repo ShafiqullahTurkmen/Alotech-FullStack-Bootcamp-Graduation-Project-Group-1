@@ -59,6 +59,12 @@ const getUserInfo = (req, res) => {
 const updateUser = (req, res) => {
   const user_id = req.params.id;
   const { username, user_name, user_surname, user_password, user_email, user_type } = req.body;
+
+  // hashs and salts password
+  salt_password = user_password + process.env.SALT_PASS;
+  user_password_hash = CryptoJs.SHA256(salt_password).toString();
+  console.log(user_password_hash);
+
   sequelize
     .query(
       "CALL updateUser (:_user_id, :_username, :_user_name, :_user_surname, :_user_password, :_user_email, :_user_type)",
@@ -68,7 +74,7 @@ const updateUser = (req, res) => {
           _username: username,
           _user_name: user_name,
           _user_surname: user_surname,
-          _user_password: user_password,
+          _user_password: user_password_hash,
           _user_email: user_email,
           _user_type: user_type,
         },

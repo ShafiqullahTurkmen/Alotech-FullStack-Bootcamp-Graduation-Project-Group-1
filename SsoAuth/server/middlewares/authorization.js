@@ -7,8 +7,6 @@ const authorization = (req, res) => {
   const token = req.cookies.access_token;
   let data;
   if (!token || token === undefined) {
-    //Bu url test amaçlı girilmiştır
-    // burası login sayfasına gitmesi gerekiyor
 
     // react login page
     return res.redirect("http://127.0.0.1:3000");
@@ -48,12 +46,8 @@ const authorization = (req, res) => {
         token,
         userId,
         username,
-        True: true,
-        middleware: "authorization",
         expiresIn,
       };
-
-      console.log(credentials);
 
       return res
         .cookie("credential", credentials, {
