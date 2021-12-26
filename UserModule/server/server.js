@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.use("/users", userRoute);
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 9005;
 db.sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
