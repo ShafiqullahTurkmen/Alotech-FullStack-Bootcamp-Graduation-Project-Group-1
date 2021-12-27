@@ -13,7 +13,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return 200', function(done) {
         chai.request(indexUrl)
-        .get(`users/${ids[0]}`)
+        .get(`users/1`)
         .send({})
         .end(function(error, response) {
             expect(response.statusCode).to.equal(200);
@@ -23,7 +23,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return status success', function(done) {
         chai.request(indexUrl)
-        .get(`users/${ids[1]}`)
+        .get(`users/1`)
         .send({})
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
@@ -33,7 +33,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return "User found" message', function(done) {
         chai.request(indexUrl)
-        .get(`users/${ids[2]}`)
+        .get(`users/1`)
         .send({})
         .end(function(error, response) {
             expect(response.body.message).to.equal("User found");
@@ -43,10 +43,10 @@ const getUserTest = describe('Get user', function() {
 
     it('should return user as user objects', function(done) {
         chai.request(indexUrl)
-        .get(`users/${ids[3]}`)
+        .get(`users/1`)
         .send({})
         .end(function(error, response) {
-            expect(response.body.user[0]).to.be.jsonSchema(userSchema);
+            expect(response.body.user).to.be.jsonSchema(userSchema);
             done();
         });
     });

@@ -32,7 +32,7 @@ const updateUserTest = describe('Update user', function() {
         });
     });
 
-    it('should return "User created" message', function(done) {
+    it('should return "User updated" message', function(done) {
         chai.request(indexUrl)
         .put(`users/${ids[2]}`)
         .send(testUsers.testUser3)

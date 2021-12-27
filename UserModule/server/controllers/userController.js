@@ -10,7 +10,7 @@ const getListOfUsers = (req, res) => {
       res.status(200).json({ status: "success", message: "Users found", users: v });
     })
     .catch((err) => {
-      res.status(500).json({ status: "error", message: err });
+      res.status(400).json({ status: "error", message: err });
     });
 };
 
@@ -41,7 +41,7 @@ const createUser = (req, res) => {
     .catch((err) => {
       let errors = validationResult(req);
       let error_message = errors.array().map((error) => error.msg);
-      res.status(500).json({ status: "error", message: error_message });
+      res.status(400).json({ status: "error", message: error_message });
     });
 };
 
@@ -57,7 +57,7 @@ const getUserInfo = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).json({ status: "error", message: err });
+      res.status(400).json({ status: "error", message: err });
     });
 };
 
@@ -90,7 +90,7 @@ const updateUser = (req, res) => {
     .catch((err) => {
       let errors = validationResult(req);
       let error_message = errors.array().map((error) => error.msg);
-      res.status(500).json({ status: "error", message: error_message });
+      res.status(400).json({ status: "error", message: error_message });
     });
 };
 
@@ -102,7 +102,7 @@ const deleteUser = (req, res) => {
       res.status(200).json({ status: "success", message: "User deleted" });
     })
     .catch((err) => {
-      res.status(500).json({ status: "error", message: err });
+      res.status(400).json({ status: "error", message: err });
     });
 };
 

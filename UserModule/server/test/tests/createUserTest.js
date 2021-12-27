@@ -11,7 +11,6 @@ const testUsers = require('../schemas/testUsers');
 const { indexUrl } = require('../testConfig');
 let userIds = [];
 
-
 const createUserTest = describe('Create user', function() {
 
     it('should return 201', function(done) {
@@ -21,7 +20,7 @@ const createUserTest = describe('Create user', function() {
         .end(function(error, response) {
             expect(response.statusCode).to.equal(201);
             userIds.push(response.body.user.id);
-            fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
+            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -31,10 +30,9 @@ const createUserTest = describe('Create user', function() {
         .post("users")
         .send(testUsers.testUser2)
         .end(function(error, response) {
-            // Response body status should be success
             expect(response.body.status).to.equal("success");
             userIds.push(response.body.user.id);
-            fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
+            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -46,7 +44,7 @@ const createUserTest = describe('Create user', function() {
         .end(function(error, response) {
             expect(response.body.message).to.equal("User created");
             userIds.push(response.body.user.id);
-            fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
+            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -58,7 +56,7 @@ const createUserTest = describe('Create user', function() {
         .end(function(error, response) {
             expect(response.body.user).to.be.jsonSchema(userSchema);
             userIds.push(response.body.user.id);
-            fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
+            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
