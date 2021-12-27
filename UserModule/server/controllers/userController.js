@@ -1,6 +1,7 @@
 const db = require("../models");
 const CryptoJs = require('crypto-js')
 const sequelize = db.sequelize;
+const {body, validationResult} = require('express-validator');
 
 const getListOfUsers = (req, res) => {
   sequelize
@@ -19,8 +20,6 @@ const createUser = (req, res) => {
   // hashs and salts password
   salt_password = user_password + process.env.SALT_PASS;
   user_password_hash = CryptoJs.SHA256(salt_password).toString();
-  console.log(user_password_hash);
-
 
   sequelize
     .query(
@@ -40,7 +39,9 @@ const createUser = (req, res) => {
       res.status(201).json({ status: "success", message: "User created", user: v[0] });
     })
     .catch((err) => {
-      res.status(500).json({ status: "error", message: err });
+      let errors = validationResult(req);
+      let error_message = errors.array().map((error) => error.msg);
+      res.status(500).json({ status: "error", message: error_message });
     });
 };
 
@@ -49,7 +50,11 @@ const getUserInfo = (req, res) => {
   sequelize
     .query("CALL getUserInfo (:_user_id)", { replacements: { _user_id: user_id } })
     .then((v) => {
-      res.status(200).json({ status: "success", message: "User found", user: v });
+      if (v.length > 0) {
+        res.status(200).json({ status: "success", message: "User found", user: v[0] });
+      } else {
+        res.status(404).json({ status: "error", message: "User not found" });
+      }
     })
     .catch((err) => {
       res.status(500).json({ status: "error", message: err });
@@ -63,7 +68,6 @@ const updateUser = (req, res) => {
   // hashs and salts password
   salt_password = user_password + process.env.SALT_PASS;
   user_password_hash = CryptoJs.SHA256(salt_password).toString();
-  console.log(user_password_hash);
 
   sequelize
     .query(
@@ -84,7 +88,9 @@ const updateUser = (req, res) => {
       res.status(200).json({ status: "success", message: "User updated", user: v[0] });
     })
     .catch((err) => {
-      res.status(500).json({ status: "error", message: err });
+      let errors = validationResult(req);
+      let error_message = errors.array().map((error) => error.msg);
+      res.status(500).json({ status: "error", message: error_message });
     });
 };
 

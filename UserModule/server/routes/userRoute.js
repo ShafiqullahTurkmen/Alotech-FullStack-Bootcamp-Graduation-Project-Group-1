@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const {createUserValidation, updateUserValidation} = require('../middlewares/validation');
 
 const {
   getListOfUsers,
@@ -14,8 +15,13 @@ router.use((req, res, next) => {
   next();
 });
 
-router.route("/").get(getListOfUsers).post(createUser);
+router.route("/")
+  .get(getListOfUsers)
+  .post(createUserValidation, createUser);
 
-router.route("/:id").get(getUserInfo).put(updateUser).delete(deleteUser);
+router.route("/:id")
+  .get(getUserInfo)
+  .put(updateUserValidation, updateUser)
+  .delete(deleteUser);
 
 module.exports = router;
