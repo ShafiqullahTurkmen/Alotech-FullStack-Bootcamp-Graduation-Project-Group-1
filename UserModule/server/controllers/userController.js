@@ -6,7 +6,7 @@ const getListOfUsers = (req, res) => {
   sequelize
     .query("CALL getListOfUsers ()")
     .then((v) => {
-      res.status(201).json({ status: "success", message: "Users found", users: v });
+      res.status(200).json({ status: "success", message: "Users found", users: v });
     })
     .catch((err) => {
       res.status(500).json({ status: "error", message: err });
@@ -49,7 +49,7 @@ const getUserInfo = (req, res) => {
   sequelize
     .query("CALL getUserInfo (:_user_id)", { replacements: { _user_id: user_id } })
     .then((v) => {
-      res.status(201).json({ status: "success", message: "User found", user: v });
+      res.status(200).json({ status: "success", message: "User found", user: v });
     })
     .catch((err) => {
       res.status(500).json({ status: "error", message: err });
@@ -81,7 +81,7 @@ const updateUser = (req, res) => {
       },
     )
     .then((v) => {
-      res.status(201).json({ status: "success", message: "User updated", user: v[0] });
+      res.status(200).json({ status: "success", message: "User updated", user: v[0] });
     })
     .catch((err) => {
       res.status(500).json({ status: "error", message: err });
@@ -93,7 +93,7 @@ const deleteUser = (req, res) => {
   sequelize
     .query("CALL deleteUser (:_user_id)", { replacements: { _user_id: user_id } })
     .then((v) => {
-      res.status(201).json({ status: "success", message: "User deleted" });
+      res.status(200).json({ status: "success", message: "User deleted" });
     })
     .catch((err) => {
       res.status(500).json({ status: "error", message: err });
