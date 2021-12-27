@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-// Import controllers
 const {
   getListOfUsers,
   createUser,
@@ -10,24 +9,13 @@ const {
   deleteUser,
 } = require("../controllers/userController.js");
 
-// /users route for all users
-router
-  .route("/")
-  // Get a user
-  .get(getListOfUsers)
-  // Create a new user
-  .post(createUser);
-// Delete a user
+router.use((req, res, next) => {
+  console.log("ROUTER TOKEN AUTH MIDDLEWARE");
+  next();
+});
 
-// /users/:id route for single user object
-router
-  .route("/:id")
-  // Get a user
-  .get(getUserInfo)
-  // Update a user
-  .put(updateUser)
-  // Delete a user
-  .delete(deleteUser);
+router.route("/").get(getListOfUsers).post(createUser);
 
-// Export the router
+router.route("/:id").get(getUserInfo).put(updateUser).delete(deleteUser);
+
 module.exports = router;

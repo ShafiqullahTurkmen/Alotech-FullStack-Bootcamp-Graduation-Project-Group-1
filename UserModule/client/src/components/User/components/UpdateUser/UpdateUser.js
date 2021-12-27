@@ -32,7 +32,7 @@ function UpdateUser({ user, setPosted }) {
       user_type: role,
     };
     axios
-      .put(apiUrl + `/users/${id}`, data)
+      .put(apiUrl + `/users/${id}`, data, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
       })

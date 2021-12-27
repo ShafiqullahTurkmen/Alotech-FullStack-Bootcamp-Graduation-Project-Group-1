@@ -36,12 +36,14 @@ const useForm = (submitForm) => {
 
     axios
       .post(`${apiUrl}/auth`, data)
-      .then((res) => {
-        //console.log(res.data);
-        window.location.href = `${res.data.url}?token=${res.data.token}`;
+      .then((response) => {
+        console.log("[Auth Response]", response);
+        if (response.data.auth === true) {
+          window.location.href = `${url_query}?user=${values.username}`;
+        }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch((error) => {
+        console.log(error);
       });
   };
 

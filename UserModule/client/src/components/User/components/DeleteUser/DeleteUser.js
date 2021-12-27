@@ -13,7 +13,7 @@ function DeleteUser({ user, setPosted }) {
     const id = user.id;
     e.preventDefault();
     axios
-      .delete(apiUrl + `/users/${id}`)
+      .delete(apiUrl + `/users/${id}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
       })

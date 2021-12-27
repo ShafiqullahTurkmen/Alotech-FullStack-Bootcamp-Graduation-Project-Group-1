@@ -12,58 +12,80 @@ function App() {
   const [users, setUsers] = useState([]);
   const [posted, setPosted] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get(`${apiUrl}/users`)
-      .then((res) => {
-        setUsers(res.data.users);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    setPosted(false);
-  }, [posted]);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${apiUrl}/users`)
+  //     .then((res) => {
+  //       setUsers(res.data.users);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  //   setPosted(false);
+  // }, [posted]);
 
   useEffect(() => {
-    const query_token = new URLSearchParams(window.location.search).get(
-      "token"
-    );
+    const user = new URLSearchParams(window.location.search).get("user");
 
-    if (query_token) {
-      console.log("query token: " + query_token);
-      setToken(query_token);
-    } else {
-      console.log("empty query");
-    }
-
-    const token = getToken();
-    console.log(token);
-
-    if (!token || token === undefined || token === "undefined") {
-      const currentURL = window.location.origin;
-      window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+    if (!user) {
+      var cookie_token = getToken();
+      if (cookie_token === undefined) {
+        const currentURL = window.location.origin;
+        window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+        return;
+      } else {
+        axios
+          .post(`${authUrl}/auth/token`, { token: getToken() })
+          .then((response) => {
+            console.log("[isTokenValid response]", response);
+            if (response.data.valid === true) {
+              axios
+                .get(`${apiUrl}/users`, { withCredentials: true })
+                .then((res) => {
+                  setUsers(res.data.users);
+                })
+                .catch((err) => {
+                  console.log(err);
+                });
+              setPosted(false);
+              return;
+            } else {
+              resetToken();
+              const currentURL = window.location.origin;
+              window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+            }
+          })
+          .catch((error) => {
+            console.log("error", error);
+          });
+      }
     } else {
       axios
-        .get(`${authUrl}/auth/token`, {
-          //isAccessTokenValid(token)
-          withCredentials: true,
-        })
-        .then((res) => {
-          if (res.data.status === "error") {
+        .post(`${authUrl}/`, { username: user })
+        .then((response) => {
+          console.log("[authorization response]", response);
+          if (response.data.auth === true) {
+            setToken(response.data.token);
+            axios
+              .get(`${apiUrl}/users`, { withCredentials: true })
+              .then((res) => {
+                setUsers(res.data.users);
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+            setPosted(false);
+          } else {
             resetToken();
             const currentURL = window.location.origin;
             window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
-          } else {
-            console.log("test");
           }
         })
-        .catch((err) => {
-          console.log("error: " + err);
-          const currentURL = window.location.origin;
-          window.location.href = `${authUrl}/auth?redirectURL=${currentURL}`;
+        .catch((error) => {
+          console.log("error", error);
         });
     }
-  }, []);
+  }, [posted]);
 
   return (
     <div className="App">

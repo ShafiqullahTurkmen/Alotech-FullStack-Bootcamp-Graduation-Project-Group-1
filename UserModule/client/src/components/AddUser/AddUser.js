@@ -31,7 +31,7 @@ function AddUser({ posted, setPosted }) {
     };
     console.log(data);
     axios
-      .post(`${apiUrl}/users`, data)
+      .post(`${apiUrl}/users`, data, { withCredentials: true })
       .then((res) => {
         console.log(res);
         console.log(res.data);
