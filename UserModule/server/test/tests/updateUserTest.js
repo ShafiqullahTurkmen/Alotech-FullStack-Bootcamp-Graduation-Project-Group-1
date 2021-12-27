@@ -6,16 +6,28 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const userSchema = require('../schemas/userSchema');
-const testUsers = require('../schemas/testUsers');
 const { indexUrl } = require('../testConfig');
-const ids = fs.readFileSync('./test/schemas/testUsers.txt').toString().split(',');
+const {generateUser} = require('../schemas/testUsers');
+let userId;
+let updateUser = generateUser();
 
 const updateUserTest = describe('Update user', function() {
 
+    it('should create a user for test', function(done) {
+        chai.request(indexUrl)
+        .post("users")
+        .send(generateUser())
+        .end(function(error, response) {
+            expect(response.statusCode).to.equal(201);
+            userId = response.body.user.id;
+            done();
+        });
+    });
+
     it('should return 200', function(done) {
         chai.request(indexUrl)
-        .put(`users/${ids[0]}`)
-        .send(testUsers.testUser1)
+        .put(`users/${userId}`)
+        .send(updateUser)
         .end(function(error, response) {
             expect(response.statusCode).to.equal(200);
             done();
@@ -24,8 +36,8 @@ const updateUserTest = describe('Update user', function() {
 
     it('should return status success', function(done) {
         chai.request(indexUrl)
-        .put(`users/${ids[1]}`)
-        .send(testUsers.testUser2)
+        .put(`users/${userId}`)
+        .send(updateUser)
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
             done();
@@ -34,8 +46,8 @@ const updateUserTest = describe('Update user', function() {
 
     it('should return "User updated" message', function(done) {
         chai.request(indexUrl)
-        .put(`users/${ids[2]}`)
-        .send(testUsers.testUser3)
+        .put(`users/${userId}`)
+        .send(updateUser)
         .end(function(error, response) {
             expect(response.body.message).to.equal("User updated");
             done();
@@ -44,8 +56,8 @@ const updateUserTest = describe('Update user', function() {
 
     it('should return user as user objects', function(done) {
         chai.request(indexUrl)
-        .put(`users/${ids[3]}`)
-        .send(testUsers.testUser4)
+        .put(`users/${userId}`)
+        .send(updateUser)
         .end(function(error, response) {
             expect(response.body.user).to.be.jsonSchema(userSchema);
             done();

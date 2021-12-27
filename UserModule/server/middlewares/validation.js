@@ -17,19 +17,7 @@ const createUserValidation = [
     body('user_name', 'User name is required').notEmpty(),
     body('user_surname', 'User surname is required').notEmpty(),
     body('user_password', 'User password is required').notEmpty(),
-    body('user_email', 'User email is required').notEmpty()
-        .custom((value) => {
-            return (db.User.findOne({
-                where: {
-                    user_email: value
-                    }
-                }).then((user) => {
-                    if (user) {
-                        return Promise.reject('User email already exists');
-                    }
-                })
-            );
-        }),            
+    body('user_email').isEmail().withMessage('Email is invalid'),
     body('user_type', 'User type is required').notEmpty(),
 ];
 
@@ -38,6 +26,7 @@ const updateUserValidation = [
     body('user_name', 'User name is required').notEmpty(),
     body('user_surname', 'User surname is required').notEmpty(),
     body('user_password', 'User password is required').notEmpty(),
+    body('user_email').isEmail().withMessage('Email is invalid'),
     body('user_email', 'User email is required').notEmpty(),
     body('user_type', 'User type is required').notEmpty(),
 ];

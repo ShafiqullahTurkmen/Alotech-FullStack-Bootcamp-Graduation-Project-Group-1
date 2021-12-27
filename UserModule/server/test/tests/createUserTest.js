@@ -5,22 +5,18 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-
 const userSchema = require('../schemas/userSchema');
-const testUsers = require('../schemas/testUsers');
 const { indexUrl } = require('../testConfig');
-let userIds = [];
+const {generateUser} = require('../schemas/testUsers');
 
 const createUserTest = describe('Create user', function() {
 
     it('should return 201', function(done) {
         chai.request(indexUrl)
         .post("users")
-        .send(testUsers.testUser1)
+        .send(generateUser())
         .end(function(error, response) {
             expect(response.statusCode).to.equal(201);
-            userIds.push(response.body.user.id);
-            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -28,11 +24,9 @@ const createUserTest = describe('Create user', function() {
     it('should return status success', function(done) {
         chai.request(indexUrl)
         .post("users")
-        .send(testUsers.testUser2)
+        .send(generateUser())
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
-            userIds.push(response.body.user.id);
-            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -40,11 +34,9 @@ const createUserTest = describe('Create user', function() {
     it('should return "User created" message', function(done) {
         chai.request(indexUrl)
         .post("users")
-        .send(testUsers.testUser3)
+        .send(generateUser())
         .end(function(error, response) {
             expect(response.body.message).to.equal("User created");
-            userIds.push(response.body.user.id);
-            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });
@@ -52,11 +44,9 @@ const createUserTest = describe('Create user', function() {
     it('should return user as user objects', function(done) {
         chai.request(indexUrl)
         .post("users")
-        .send(testUsers.testUser4)
+        .send(generateUser())
         .end(function(error, response) {
             expect(response.body.user).to.be.jsonSchema(userSchema);
-            userIds.push(response.body.user.id);
-            //fs.writeFileSync('./test/schemas/testUsers.txt', userIds.toString());
             done();
         });
     });

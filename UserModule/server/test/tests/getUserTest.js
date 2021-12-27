@@ -7,13 +7,25 @@ chai.use(chaiHttp);
 
 const userSchema = require('../schemas/userSchema');
 const { indexUrl } = require('../testConfig');
-const ids = fs.readFileSync('./test/schemas/testUsers.txt').toString().split(',');
+const {generateUser} = require('../schemas/testUsers');
+let userId;
 
 const getUserTest = describe('Get user', function() {
 
+    it('should create a user for test', function(done) {
+        chai.request(indexUrl)
+        .post("users")
+        .send(generateUser())
+        .end(function(error, response) {
+            expect(response.statusCode).to.equal(201);
+            userId = response.body.user.id;
+            done();
+        });
+    });
+
     it('should return 200', function(done) {
         chai.request(indexUrl)
-        .get(`users/1`)
+        .get(`users/${userId}`)
         .send({})
         .end(function(error, response) {
             expect(response.statusCode).to.equal(200);
@@ -23,7 +35,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return status success', function(done) {
         chai.request(indexUrl)
-        .get(`users/1`)
+        .get(`users/${userId}`)
         .send({})
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
@@ -33,7 +45,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return "User found" message', function(done) {
         chai.request(indexUrl)
-        .get(`users/1`)
+        .get(`users/${userId}`)
         .send({})
         .end(function(error, response) {
             expect(response.body.message).to.equal("User found");
@@ -43,7 +55,7 @@ const getUserTest = describe('Get user', function() {
 
     it('should return user as user objects', function(done) {
         chai.request(indexUrl)
-        .get(`users/1`)
+        .get(`users/${userId}`)
         .send({})
         .end(function(error, response) {
             expect(response.body.user).to.be.jsonSchema(userSchema);

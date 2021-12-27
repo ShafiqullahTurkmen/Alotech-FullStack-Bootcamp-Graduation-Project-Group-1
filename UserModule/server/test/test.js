@@ -8,30 +8,15 @@ const updateUserTest = require('./tests/updateUserTest');
 const deleteUserTest = require('./tests/deleteUserTest');
 const testCases = require('./tests/testCases');
 
-describe('User Module API', async function() {
+// describe('User Module API', async function() {
    
-    setTimeout(async function() {
-        await createUserTest;
-    }, 1000);
-
-    setTimeout(async function() {
-        await getUsersTest;
-    }, 1000);
-
-    setTimeout(async function() {
-        await getUserTest;
-    }, 1000);
-
-    setTimeout(async function() {
-        await updateUserTest;
-    }, 1000);
-
-    setTimeout(async function() {
-        await deleteUserTest;
-    }, 1000);
-
-    setTimeout(async function() {
-        await testCases;
-    }, 1000);
+//     await createUserTest;
+//     await getUsersTest;
+//     await getUserTest;
+//     await updateUserTest;
+//     await deleteUserTest;
+//     await testCases;
     
-});
+// });
+
+const {generateUser} = require('./schemas/testUsers');
