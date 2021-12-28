@@ -78,7 +78,6 @@ function App() {
     }
   }, []);
 
-  //  ERROR WHEN TOKEN GET FROM COOKIE
   return (
     <>
       {isLoading && <Loading isError={isError} />}

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, Modal, Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 
+const { getToken } = require("../../../../utility/Utility");
+
 const apiUrl = "http://localhost:9000";
 
 function UpdateUser({ user, setPosted }) {
@@ -32,12 +34,15 @@ function UpdateUser({ user, setPosted }) {
       user_type: role,
     };
     axios
-      .put(apiUrl + `/users/${id}`, data, { withCredentials: true })
+      .put(apiUrl + `/users/${id}`, data, {
+        headers: {
+          access_token: getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
       })
       .catch((err) => {
-        //fix put internal error 500
         console.log("error: " + err);
       });
     setPosted(true);

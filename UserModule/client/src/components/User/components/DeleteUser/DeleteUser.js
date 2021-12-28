@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
+const { getToken } = require("../../../../utility/Utility");
+
 const apiUrl = "http://localhost:9000";
 
 function DeleteUser({ user, setPosted }) {
@@ -13,7 +15,11 @@ function DeleteUser({ user, setPosted }) {
     const id = user.id;
     e.preventDefault();
     axios
-      .delete(apiUrl + `/users/${id}`, { withCredentials: true })
+      .delete(apiUrl + `/users/${id}`, {
+        headers: {
+          access_token: getToken(),
+        },
+      })
       .then((res) => {
         console.log(res.data);
       })

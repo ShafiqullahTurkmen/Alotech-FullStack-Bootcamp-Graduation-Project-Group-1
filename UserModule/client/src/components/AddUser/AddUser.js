@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button, Modal, Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 
+const { getToken } = require("../../utility/Utility");
+
 const apiUrl = "http://localhost:9000";
 
 function AddUser({ posted, setPosted }) {
@@ -31,7 +33,11 @@ function AddUser({ posted, setPosted }) {
     };
     console.log(data);
     axios
-      .post(`${apiUrl}/users`, data, { withCredentials: true })
+      .post(`${apiUrl}/users`, data, {
+        headers: {
+          access_token: getToken(),
+        },
+      })
       .then((res) => {
         console.log(res);
         console.log(res.data);
