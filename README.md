@@ -70,9 +70,9 @@ gh repo clone Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-G
 
 ## API Reference
 
-#### [ User Module API Reference ](  )
+#### [ User Module API Reference ]( https://github.com/Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-Graduation-Project-Group-1/blob/main/UserModule/server/README.md )
 
-#### [ Sso Auth API Reference ](  )
+#### [ Sso Auth API Reference ]( https://github.com/Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-Graduation-Project-Group-1/blob/main/SsoAuth/server/README.md )
 
 ---
 
