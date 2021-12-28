@@ -1,12 +1,10 @@
-const fs = require('fs');
-
 const expect = require('chai').expect;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const userSchema = require('../schemas/userSchema');
-const { indexUrl } = require('../testConfig');
+const { indexUrl, access_token } = require('../testConfig');
 const {generateUser} = require('../schemas/testUsers');
 let userId;
 let updateUser = generateUser();
@@ -16,6 +14,8 @@ const updateUserTest = describe('Update user', function() {
     it('should create a user for test', function(done) {
         chai.request(indexUrl)
         .post("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send(generateUser())
         .end(function(error, response) {
             expect(response.statusCode).to.equal(201);
@@ -27,6 +27,8 @@ const updateUserTest = describe('Update user', function() {
     it('should return 200', function(done) {
         chai.request(indexUrl)
         .put(`users/${userId}`)
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send(updateUser)
         .end(function(error, response) {
             expect(response.statusCode).to.equal(200);
@@ -37,6 +39,8 @@ const updateUserTest = describe('Update user', function() {
     it('should return status success', function(done) {
         chai.request(indexUrl)
         .put(`users/${userId}`)
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send(updateUser)
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
@@ -47,6 +51,8 @@ const updateUserTest = describe('Update user', function() {
     it('should return "User updated" message', function(done) {
         chai.request(indexUrl)
         .put(`users/${userId}`)
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send(updateUser)
         .end(function(error, response) {
             expect(response.body.message).to.equal("User updated");
@@ -57,6 +63,8 @@ const updateUserTest = describe('Update user', function() {
     it('should return user as user objects', function(done) {
         chai.request(indexUrl)
         .put(`users/${userId}`)
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send(updateUser)
         .end(function(error, response) {
             expect(response.body.user).to.be.jsonSchema(userSchema);

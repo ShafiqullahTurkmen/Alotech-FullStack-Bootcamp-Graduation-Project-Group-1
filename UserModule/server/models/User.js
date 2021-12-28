@@ -31,5 +31,24 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   });
 
+  User.createUser = (
+    username,
+    user_name,
+    user_surname,
+    user_password,
+    user_email,
+    user_type
+  ) => {
+    const userInstance = User.create({
+      username,
+      user_name,
+      user_surname,
+      user_password,
+      user_email,
+      user_type
+    });
+    return userInstance;
+  };
+
   return User;
-}
+};

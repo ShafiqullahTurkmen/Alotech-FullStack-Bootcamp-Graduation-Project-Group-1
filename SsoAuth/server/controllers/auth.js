@@ -66,7 +66,7 @@ const loginUser = async (req, res) => {
     });
   }
 
-  const time_to_live = "120s";
+  const time_to_live = "1d";
   const isAdmin = loginUser.user_type === "admin";
 
   const token = jwt.sign(
@@ -95,7 +95,7 @@ const loginUser = async (req, res) => {
     source_url
   );
 
-  return res.json({
+  return res.status(201).json({
     auth: true,
     msg: "login success",
     user_id: loginUser.id,

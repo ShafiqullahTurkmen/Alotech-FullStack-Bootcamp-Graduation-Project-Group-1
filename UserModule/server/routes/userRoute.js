@@ -19,8 +19,8 @@ const {
 router
   .route("/")
   .get(validToken, checkAdmin, getListOfUsers)
-  .post(validToken, checkAdmin, createUserValidation, createUser);
-
+  .post( createUserValidation, createUser);
+//validToken, checkAdmin
 router
   .route("/:id")
   .get(validToken, checkUser, getUserInfo)

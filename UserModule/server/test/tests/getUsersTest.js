@@ -4,13 +4,15 @@ const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
 const userSchema = require('../schemas/userSchema');
-const { indexUrl } = require('../testConfig');
+const { indexUrl, access_token } = require('../testConfig');
 
 const getUsersTest = describe('Get users', function() {
 
     it('should return 200', function(done) {
         chai.request(indexUrl)
         .get("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send({})
         .end(function(error, response) {
             expect(response.statusCode).to.equal(200);
@@ -21,6 +23,8 @@ const getUsersTest = describe('Get users', function() {
     it('should return status success', function(done) {
         chai.request(indexUrl)
         .get("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send({})
         .end(function(error, response) {
             expect(response.body.status).to.equal("success");
@@ -31,6 +35,8 @@ const getUsersTest = describe('Get users', function() {
     it('should return "users found" message', function(done) {
         chai.request(indexUrl)
         .get("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send({})
         .end(function(error, response) {
             expect(response.body.message).to.equal("Users found");
@@ -41,6 +47,8 @@ const getUsersTest = describe('Get users', function() {
     it('should return a array of users', function(done) {
         chai.request(indexUrl)
         .get("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send({})
         .end(function(error, response) {
             expect(response.body.users).to.be.a('array');
@@ -51,6 +59,8 @@ const getUsersTest = describe('Get users', function() {
     it('should return users as user objects', function(done) {
         chai.request(indexUrl)
         .get("users")
+        .set('Content-Type', 'application/json')
+        .set(access_token)
         .send({})
         .end(function(error, response) {
             expect(response.body.users).to.be.jsonSchema(userSchema);
