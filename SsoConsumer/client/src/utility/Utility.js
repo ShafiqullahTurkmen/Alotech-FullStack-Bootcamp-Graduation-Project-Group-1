@@ -1,4 +1,5 @@
 import Cookies from "universal-cookie";
+import configData from "../config.json";
 
 export function setToken(token, key = "access_token") {
   const cookies = new Cookies();
@@ -14,5 +15,9 @@ export function resetToken(key = "access_token") {
   const cookies = new Cookies();
   setToken(undefined);
   cookies.remove(key);
-  window.location.href = "http://127.0.0.1:3005";
+}
+
+export function redirectLogin() {
+  const currentURL = window.location.origin;
+  window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
 }

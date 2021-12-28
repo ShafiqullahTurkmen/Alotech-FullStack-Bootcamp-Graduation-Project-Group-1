@@ -6,7 +6,6 @@ const sequelize = db.sequelize;
 
 const isTokenValid = async (req, res) => {
   const token = req.body.token;
-  console.log(token);
 
   if (!token || token === undefined) {
     return res.json({ valid: false, msg: "empty token" });
@@ -27,7 +26,12 @@ const isTokenValid = async (req, res) => {
     if (error) {
       return res.json({ valid: false, msg: "token expired" });
     } else {
-      return res.json({ valid: true, msg: "token valid" });
+      return res.json({
+        valid: true,
+        user_id: decoded.user_id,
+        isAdmin: decoded.isAdmin,
+        msg: "token valid",
+      });
     }
   });
 };

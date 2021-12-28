@@ -14,5 +14,4 @@ export function resetToken(key = "access_token") {
   const cookies = new Cookies();
   setToken(undefined);
   cookies.remove(key);
-  window.location.href = "http://127.0.0.1:3005";
 }

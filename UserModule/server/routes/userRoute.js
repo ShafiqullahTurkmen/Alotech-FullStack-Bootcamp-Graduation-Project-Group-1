@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const {createUserValidation, updateUserValidation} = require('../middlewares/validation');
+const {
+  createUserValidation,
+  updateUserValidation,
+  validToken,
+  checkUser,
+  checkAdmin,
+} = require("../middlewares/validation");
 
 const {
   getListOfUsers,
@@ -10,18 +16,15 @@ const {
   deleteUser,
 } = require("../controllers/userController.js");
 
-router.use((req, res, next) => {
-  console.log("ROUTER TOKEN AUTH MIDDLEWARE");
-  next();
-});
+router
+  .route("/")
+  .get(validToken, checkAdmin, getListOfUsers)
+  .post(validToken, checkAdmin, createUserValidation, createUser);
 
-router.route("/")
-  .get(getListOfUsers)
-  .post(createUserValidation, createUser);
-
-router.route("/:id")
-  .get(getUserInfo)
-  .put(updateUserValidation, updateUser)
-  .delete(deleteUser);
+router
+  .route("/:id")
+  .get(validToken, checkUser, getUserInfo)
+  .put(validToken, checkAdmin, updateUserValidation, updateUser)
+  .delete(validToken, checkAdmin, deleteUser);
 
 module.exports = router;

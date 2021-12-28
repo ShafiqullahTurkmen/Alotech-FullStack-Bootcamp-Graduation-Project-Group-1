@@ -6,80 +6,83 @@ import configData from "./config.json";
 import { getToken, resetToken, setToken } from "./utility";
 
 function App() {
-  const [user, setUser] = useState({});
+  const [userID, setUserID] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const [userInfo, setUserInfo] = useState({});
   const [posted, setPosted] = useState(false);
 
-  useEffect(() => {
-    const user = new URLSearchParams(window.location.search).get("user");
+  const authToken = async (user) => {
+    var response = await axios.post("http://127.0.0.1:5000/", {
+      username: user,
+    });
+    return response.data;
+  };
 
-    if (!user) {
-      var cookie_token = getToken();
-      if (cookie_token === undefined) {
-        const currentURL = window.location.origin;
-        window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
-        return;
+  const checkToken = async () => {
+    var token = getToken();
+    var response = await axios.post("http://127.0.0.1:5000/auth/token", {
+      token: token,
+    });
+    return response.data;
+  };
+
+  const getUserInfo = async (id) => {
+    var response = await axios.get(`http://127.0.0.1:9000/users/${id}`, {
+      headers: {
+        access_token: getToken(),
+      },
+    });
+    return response.data;
+  };
+
+  const redirectLogin = () => {
+    const currentURL = window.location.origin;
+    window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
+  };
+
+  useEffect(async () => {
+    var session_id = new URLSearchParams(window.location.search).get("user");
+
+    if (session_id) {
+      var auth_response = await authToken(session_id);
+      if (auth_response.auth === false) {
+        console.log("redirect-> reason: unvalid session id");
+        redirectLogin();
       } else {
-        axios
-          .post(`${configData.authUrl}/auth/token`, { token: getToken() })
-          .then((response) => {
-            console.log("[isTokenValid response]", response);
-            if (response.data.valid === true) {
-              const temp_id = getToken("user_id");
-              axios
-                .get(`${configData.apiUrl}/users/${temp_id}`)
-                .then((res) => {
-                  setUser(res.data.user[0]);
-                  setIsLoading(false);
-                })
-                .catch((err) => {
-                  setIsError(true);
-                });
-              return;
-            } else {
-              resetToken();
-              const currentURL = window.location.origin;
-              window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
-            }
-          })
-          .catch((error) => {
-            console.log("error", error);
-          });
+        setToken(auth_response.token);
+        setIsLoading(false);
+        const user_info = await getUserInfo(auth_response.user_id);
+        setUserInfo(user_info.user);
+        return;
       }
     } else {
-      axios
-        .post(`${configData.authUrl}/`, { username: user })
-        .then((response) => {
-          console.log("[authorization response]", response);
-          if (response.data.auth === true) {
-            setToken(response.data.token);
-            setToken(response.data.user_id, "user_id"); //temporary for now
-            axios
-              .get(`${configData.apiUrl}/users/${response.data.user_id}`)
-              .then((res) => {
-                setUser(res.data.user[0]);
-                setIsLoading(false);
-              })
-              .catch((err) => {
-                setIsError(true);
-              });
-          } else {
-            resetToken();
-            const currentURL = window.location.origin;
-            window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
+      var cookie_token = getToken();
+      if (cookie_token) {
+        console.log("cookie found");
+        var token_response = await checkToken();
+        if (token_response.valid === true) {
+          console.log("success from cache");
+          setIsLoading(false);
+          //const user_info = await getUserInfo(token_response.user_id);  //DOES NOT SHOW DATA WHEN GET TOKEN FROM COOKIE
+          //setUserInfo(user_info.user);
+        } else {
+          console.log("redirect-> reason: unvalid token");
+          resetToken();
+          redirectLogin();
+        }
+      } else {
+        console.log("redirect-> reason: empty cookie");
+        redirectLogin();
+      }
     }
-  }, [posted]);
+  }, []);
 
+  //  ERROR WHEN TOKEN GET FROM COOKIE
   return (
     <>
       {isLoading && <Loading isError={isError} />}
-      {!isLoading && <User user={user} setPosted={setPosted} />}
+      {!isLoading && userInfo && <User user={userInfo} setPosted={setPosted} />}
     </>
   );
 }

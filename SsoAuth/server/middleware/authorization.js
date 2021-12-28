@@ -28,6 +28,7 @@ const authorization = async (req, res) => {
         auth: true,
         msg: "authorization success",
         user_id: user_id,
+        isAdmin: decoded.isAdmin,
         token: token,
       });
     }

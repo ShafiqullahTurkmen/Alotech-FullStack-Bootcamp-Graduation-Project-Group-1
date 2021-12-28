@@ -6,9 +6,15 @@ const jwt = require("jsonwebtoken");
 const Token = db.Token;
 const sequelize = db.sequelize;
 
+const services = [
+  "http://127.0.0.1:3005",
+  "http://localhost:3005",
+  "http://127.0.0.1:9010",
+  "http://localhost:9010",
+];
+
 const loginUser = async (req, res) => {
   const { username, user_password, redirectURL } = req.body;
-
   const [user, meta] = await sequelize.query(
     "SELECT * FROM users WHERE username = :_username",
     {
@@ -30,7 +36,11 @@ const loginUser = async (req, res) => {
   }
 
   if (!redirectURL) {
-    return res.json({ auth: false, msg: "unauthorized redirect" });
+    return res.json({ auth: false, msg: "empty redirect" });
+  } else {
+    if (services.includes(redirectURL) === false) {
+      return res.json({ auth: false, msg: "unauthorized redirect" });
+    }
   }
 
   const [token_status, token_meta] = await sequelize.query(
@@ -56,10 +66,11 @@ const loginUser = async (req, res) => {
     });
   }
 
-  const time_to_live = "45s";
+  const time_to_live = "120s";
+  const isAdmin = loginUser.user_type === "admin";
 
   const token = jwt.sign(
-    { id: loginUser.id, username: loginUser.username },
+    { id: loginUser.id, username: loginUser.username, isAdmin: isAdmin },
     process.env.JWT_SECRET,
     { expiresIn: time_to_live }
   );
