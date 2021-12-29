@@ -17,6 +17,5 @@ describe('User Module API', async function() {
     await getUserTest;
     await updateUserTest;
     await deleteUserTest;
-    // await testCases;
 
 });

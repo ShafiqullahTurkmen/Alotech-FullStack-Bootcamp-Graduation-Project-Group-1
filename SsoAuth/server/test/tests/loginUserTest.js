@@ -3,49 +3,52 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 
-const testUsers = require('../schemas/testUsers');
-const tokenSchema = require('../schemas/tokenSchema');
-const { indexUrl } = require('../testConfig');
+const { authUrl } = require('../testConfig');
 
+let tokenReq = {
+    username: "admin",
+    user_password: "admin",
+    redirectURL: "http://127.0.0.1:3010",
+}
 
 const loginUserTest = describe('Login user', function() {
 
     it('should return auth as true', function(done) {
-        chai.request(indexUrl)
-        .post("")
-        .send(testUsers.testUser1)
+        chai.request(authUrl)
+        .post("auth")
+        .send(tokenReq)
         .end(function(error, response) {
             expect(response.body.auth).to.be.true;
             done();
         });
     });
 
-    it('should return success message', function(done) {
-        chai.request(indexUrl)
-        .post("")
-        .send(testUsers.testUser2)
+    it('should return session message', function(done) {
+        chai.request(authUrl)
+        .post("auth")
+        .send(tokenReq)
         .end(function(error, response) {
-            expect(response.body.msg).to.equal("login success");
+            expect(response.body.msg).to.oneOf(['new session', 'session continue']);
             done();
         });
     });
 
     it('should return user id', function(done) {
-        chai.request(indexUrl)
-        .post("")
-        .send(testUsers.testUser3)
+        chai.request(authUrl)
+        .post("auth")
+        .send(tokenReq)
         .end(function(error, response) {
-            expect(response.body.user_id).to.equal(testUsers.testUser3.id);
+            expect(response.body.user_id).to.be.a('number');
             done();
         });
     });
 
-    it('should return token as token object', function(done) {
-        chai.request(indexUrl)
-        .post("")
-        .send(testUsers.testUser4)
+    it('should return token a token', function(done) {
+        chai.request(authUrl)
+        .post("auth")
+        .send(tokenReq)
         .end(function(error, response) {
-            expect(response.body.token).to.be.jsonSchema(tokenSchema);
+            expect(response.body.token).to.be.a('string');
             done();
         });
     });

@@ -56,7 +56,7 @@ const setDB = describe('Create admin and get token for tests', function() {
         .send(tokenReq)
         .end(function(error, response) {
             token = response.body.token;
-            access_token['access_token'] = token;
+            access_token['token'] = token;
             expect(response.statusCode).to.equal(200);
             done();
         });

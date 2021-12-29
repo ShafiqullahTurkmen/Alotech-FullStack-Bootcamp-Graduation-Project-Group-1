@@ -1,13 +1,14 @@
 const chai = require('chai');
 chai.use(require('chai-json-schema'));
 
-const loginUserTest = require('./tests/loginUserTest');
+const setDB = require('./tests/setDB');
 
-describe('Auth API', function() {
-   
-    loginUserTest;
-    
+const loginUserTest =  require('./tests/loginUserTest');
+const isTokenValidTest = require('./tests/isTokenValidTest');
+
+describe('User Module API', async function() {
+
+    await setDB;
+    await loginUserTest;
+    await isTokenValidTest
 });
-
-// describe('Validation API', function() {     
-// });

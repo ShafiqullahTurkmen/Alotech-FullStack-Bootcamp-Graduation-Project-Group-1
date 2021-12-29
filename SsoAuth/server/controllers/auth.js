@@ -72,7 +72,7 @@ const loginUser = async (req, res) => {
     });
   }
 
-  const time_to_live = "120s";
+  const time_to_live = "30d";
   const isAdmin = loginUser.user_type === "admin";
 
   const token = jwt.sign(
