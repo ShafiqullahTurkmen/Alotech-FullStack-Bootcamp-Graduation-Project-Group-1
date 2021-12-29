@@ -66,7 +66,12 @@ git clone repo clone Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Boo
   npm start
 ```
 
-#### -  Visit `http://127.0.0.1:3010/?redirectURL=http://127.0.0.1:9010`
+#### -  Visit `http://127.0.0.1:3010/?redirectURL=${redirectURL}`
+
+> redirectURL should be one of authorized redirects, 
+
+- `http://127.0.0.1:9010`, the user module
+- `http://127.0.0.1:5000`, the consumer
 
 > After running the tests, username: `admin` and password `admin` can be used to log in
 
