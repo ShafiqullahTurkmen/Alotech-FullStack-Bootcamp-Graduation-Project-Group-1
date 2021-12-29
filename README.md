@@ -16,6 +16,8 @@ If a user visits an `consumer` or `user module`-protected service (`foo.sso.exam
      transparently redirected back to `consumer` where they will be logged in,
      without needing to go through the `sso-auth`
 
+![ Project Schema ]( https://i.imgur.com/X9W9n1B.png )
+
 ---
 
 ## Installation & Configuration
