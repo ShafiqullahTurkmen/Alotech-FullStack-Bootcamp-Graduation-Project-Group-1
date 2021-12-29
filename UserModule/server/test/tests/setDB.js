@@ -2,6 +2,7 @@ const expect = require('chai').expect;
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
+const CryptoJs = require("crypto-js");
 
 const db = require("../../models");
 const sequelize = db.sequelize;
@@ -10,11 +11,15 @@ const User = require("../../models").User;
 
 const {authUrl, access_token} = require('../testConfig');
 
+let password = "admin";
+let salt_password = password + process.env.SALT_PASS;
+let user_password_hash = CryptoJs.SHA256(salt_password).toString();
+
 let admin = {
     username: 'admin',
     user_name: 'admin',
     user_surname: 'admin',
-    user_password: 'f703a7bd3fd781b4b8314ad13996a6fb15c650e7f4376df99c279684ffa93282',
+    user_password: user_password_hash,
     user_email: 'admin@mail.com',
     user_type: 'admin',
 };
