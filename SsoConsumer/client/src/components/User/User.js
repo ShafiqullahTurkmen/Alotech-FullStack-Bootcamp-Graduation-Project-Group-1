@@ -38,7 +38,7 @@ function User({ user, setPosted }) {
 
   return (
     <div className="container rounded bg-white mt-5 mb-5">
-      <div className="row">
+      <div className="row shadow">
         <div className="col-md-6 border-right">
           <div className="d-flex flex-column align-items-center text-center p-3 py-5">
             <img

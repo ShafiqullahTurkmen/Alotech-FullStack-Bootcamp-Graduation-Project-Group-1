@@ -2,9 +2,8 @@ import { useState } from "react";
 import { Button, Modal, Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 
-const { getToken } = require("../../utility/Utility");
-
-const apiUrl = "http://localhost:9000";
+const { getCookie } = require("../../utility/Utility");
+const configData = require("../../config.json");
 
 function AddUser({ posted, setPosted }) {
   const [show, setShow] = useState(false);
@@ -31,29 +30,29 @@ function AddUser({ posted, setPosted }) {
       user_email: email,
       user_type: role,
     };
-    console.log(data);
+
     axios
-      .post(`${apiUrl}/users`, data, {
+      .post(`${configData.apiUrl}/users`, data, {
         headers: {
-          access_token: getToken(),
+          access_token: getCookie("access_token"),
         },
       })
       .then((res) => {
+        setPosted(true);
         console.log(res);
-        console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    setPosted(true);
+
     handleClose();
   }
 
   return (
     <>
       <Button
-        variant="outline-info"
-        className="btn-circle btn-lg fa fa-plus-circle"
+        variant="success"
+        className="btn-add btn-xl my-3 fa fa-plus"
         onClick={handleShow}
       ></Button>
 

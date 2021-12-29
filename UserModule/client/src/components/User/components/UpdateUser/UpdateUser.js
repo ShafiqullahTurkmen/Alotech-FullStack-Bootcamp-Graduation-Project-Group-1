@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Button, Modal, Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 
-const { getToken } = require("../../../../utility/Utility");
+const { getCookie } = require("../../../../utility/Utility");
 
-const apiUrl = "http://localhost:9000";
+const configData = require("../../../../config.json");
 
 function UpdateUser({ user, setPosted }) {
   const [show, setShow] = useState(false);
@@ -33,27 +33,30 @@ function UpdateUser({ user, setPosted }) {
       user_email: email,
       user_type: role,
     };
+    var cookie_token = getCookie("access_token");
+
     axios
-      .put(apiUrl + `/users/${id}`, data, {
+      .put(`${configData.apiUrl}/users/${id}`, data, {
         headers: {
-          access_token: getToken(),
+          access_token: cookie_token,
         },
       })
       .then((res) => {
+        setPosted(true);
         console.log(res.data);
       })
       .catch((err) => {
         console.log("error: " + err);
       });
-    setPosted(true);
+
     handleClose();
   }
 
   return (
     <>
       <Button
-        variant="outline-info"
-        className="btn-circle btn-lg fa fa-edit"
+        variant="warning"
+        className="btn-margin btn-xl btn-edit fa fa-edit"
         onClick={handleShow}
       ></Button>
 

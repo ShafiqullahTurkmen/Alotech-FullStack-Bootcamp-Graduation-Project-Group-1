@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import axios from "axios";
 
-const { getToken } = require("../../../../utility/Utility");
+const { getCookie } = require("../../../../utility/Utility");
 
-const apiUrl = "http://localhost:9000";
+const configData = require("../../../../config.json");
 
 function DeleteUser({ user, setPosted }) {
   const [show, setShow] = useState(false);
@@ -15,26 +15,26 @@ function DeleteUser({ user, setPosted }) {
     const id = user.id;
     e.preventDefault();
     axios
-      .delete(apiUrl + `/users/${id}`, {
+      .delete(`${configData.apiUrl}/users/${id}`, {
         headers: {
-          access_token: getToken(),
+          access_token: getCookie("access_token"),
         },
       })
       .then((res) => {
+        setPosted(true);
         console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    setPosted(true);
     handleClose();
   }
 
   return (
     <>
       <Button
-        variant="outline-info"
-        className="btn-circle btn-lg fa fa-trash"
+        variant="danger"
+        className="btn-delete btn-margin btn-xl fa fa-trash"
         onClick={handleShow}
       ></Button>
 

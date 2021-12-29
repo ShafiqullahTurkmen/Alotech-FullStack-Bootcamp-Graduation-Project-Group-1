@@ -1,1 +1,1 @@
-export { getToken, setToken, resetToken } from "./Utility";
+export { getCookie, setCookie, deleteCookie } from "./Utility";

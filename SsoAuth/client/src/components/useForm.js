@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import Validation from "./Validation";
 import axios from "axios";
+import { setCookie, getCookie } from "../utility/Utility";
 
-const apiUrl = "http://localhost:5000";
+const apiUrl = "http://localhost:3020";
 
 const useForm = (submitForm) => {
   const [values, setValues] = useState({
@@ -12,6 +13,7 @@ const useForm = (submitForm) => {
 
   const [errors, setErrors] = useState({});
   const [dataIsCorrect, setDataIsCorrect] = useState(false);
+  const [sessionRegister, setSessionRegister] = useState(undefined);
 
   const handleChange = (event) => {
     setValues({
@@ -38,8 +40,12 @@ const useForm = (submitForm) => {
       .post(`${apiUrl}/auth`, data)
       .then((response) => {
         console.log("[Auth Response]", response);
+
         if (response.data.auth === true) {
-          window.location.href = `${url_query}?user=${values.username}`;
+          setCookie("sessionID", response.data.session);
+          console.log("SESSION REGISTERED", response.data);
+          setSessionRegister(response.data.session);
+          //window.location.href = `${url_query}?user=${values.username}`;
         }
       })
       .catch((error) => {
@@ -48,10 +54,14 @@ const useForm = (submitForm) => {
   };
 
   useEffect(() => {
-    if (Object.keys(errors).length === 0 && dataIsCorrect) {
-      submitForm(true);
+    if (sessionRegister && getCookie("sessionID")) {
+      console.log("effect session");
+      const url_query = new URLSearchParams(window.location.search).get(
+        "redirectURL"
+      );
+      window.location.href = url_query;
     }
-  }, [errors]);
+  }, [sessionRegister]);
 
   return { handleChange, handleFormSubmit, errors, values };
 };

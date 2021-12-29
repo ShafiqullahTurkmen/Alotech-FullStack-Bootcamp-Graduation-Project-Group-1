@@ -10,6 +10,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      session: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
       expires: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -39,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
   Token.createToken = async (
     user_id,
     token,
+    session,
     expires,
     createdAt,
     time_to_live,
@@ -48,6 +53,7 @@ module.exports = (sequelize, DataTypes) => {
     const tokenInstance = await Token.create({
       user_id,
       token,
+      session,
       expires,
       createdAt,
       time_to_live,

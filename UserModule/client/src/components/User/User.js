@@ -4,24 +4,12 @@ import DeleteUser from "./components/DeleteUser";
 function User({ user, posted, setPosted }) {
   return (
     <tr>
-      <td className="pl-4">
-        <h6 className="font-medium mb-0">{user.id}</h6>
-      </td>
-      <td>
-        <h6 className="font-medium mb-0">{user.username}</h6>
-      </td>
-      <td>
-        <h6 className="font-medium mb-0">{user.user_name}</h6>
-      </td>
-      <td>
-        <h6 className="font-medium mb-0">{user.user_surname}</h6>
-      </td>
-      <td>
-        <span className="text">{user.user_email}</span>
-      </td>
-      <td>
-        <span className="text">{user.user_type}</span>
-      </td>
+      <td>{user.id}</td>
+      <td>{user.username}</td>
+      <td>{user.user_name}</td>
+      <td>{user.user_surname}</td>
+      <td>{user.user_email}</td>
+      <td>{user.user_type}</td>
       <td>
         <UpdateUser user={user} posted={posted} setPosted={setPosted} />
         <DeleteUser user={user} setPosted={setPosted} />

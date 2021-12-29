@@ -1,52 +1,61 @@
-body {
-  background: #edf1f5;
-  margin-top: 20px;
-}
-.card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background-color: #fff;
-  background-clip: border-box;
-  border: 0 solid transparent;
-  border-radius: 0;
-}
-.btn-circle.btn-lg,
-.btn-group-lg > .btn-circle.btn {
+.btn-xl {
   width: 50px;
-  height: 50px;
-  padding: 14px 15px;
-  font-size: 18px;
-  line-height: 23px;
-}
-.text-muted {
-  color: #8898aa !important;
-}
-[type="button"]:not(:disabled),
-[type="reset"]:not(:disabled),
-[type="submit"]:not(:disabled),
-button:not(:disabled) {
-  cursor: pointer;
-}
-.btn-circle {
-  border-radius: 100%;
-  width: 40px;
   height: 40px;
-  padding: 10px;
-  margin-right: 10px;
-}
-.user-table tbody tr .category-select {
-  max-width: 150px;
-  border-radius: 20px;
+  font-size: 28px;
+  line-height: 1;
 }
 
-thead {
-  background-color: #b8e3ff;
+table {
+  vertical-align: middle !important;
 }
-.table td,
-.table th,
-.manage-head {
-  vertical-align: middle;
+
+.th-id {
+  color: black;
+  font-weight: bold;
+}
+
+.header-color {
+  background: #3ec1d3;
+  color: white;
+}
+
+.title-color {
+  color: #3ec1d3;
+}
+
+.btn-delete {
+  background: #ff165d;
+}
+
+.btn-edit {
+  background: #ff9a00;
+  color: white;
+}
+
+.btn-add {
+  background: #95cd41;
+  color: white;
+  font-size: 26px;
+}
+
+.btn:hover {
+  color: white;
+}
+
+.btn:focus {
+  color: white;
+}
+
+.btn-margin {
+  margin-right: 5px;
+}
+
+.btn-circle {
+  width: 30px;
+  height: 30px;
+  padding: 6px 0px;
+  border-radius: 15px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.42857;
 }

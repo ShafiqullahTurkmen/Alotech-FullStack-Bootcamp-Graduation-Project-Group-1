@@ -6,9 +6,9 @@ const db = require("./models");
 const authRoute = require("./routes/authRout");
 const authorization = require("./middleware/authorization");
 const log4js = require("log4js");
-var fs = require('fs');
-const saveLogs = require('./middleware/saveLogs')
-const storeLogsToDB = require('./middleware/storeLogsToDB')
+var fs = require("fs");
+const saveLogs = require("./middleware/saveLogs");
+const storeLogsToDB = require("./middleware/storeLogsToDB");
 
 const app = express();
 
@@ -24,13 +24,12 @@ app.use(cookieParser());
 app.use(saveLogs);
 app.use(storeLogsToDB);
 
-
 app.post("/", authorization);
 app.use("/auth", authRoute);
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3020;
 
-db.sequelize.sync({ force: false }).then(() => { 
+db.sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
   });

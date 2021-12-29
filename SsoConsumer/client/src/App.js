@@ -3,80 +3,75 @@ import axios from "axios";
 import User from "./components/User";
 import Loading from "./components/Loading";
 import configData from "./config.json";
-import { getToken, resetToken, setToken } from "./utility";
+import { getCookie, setCookie, deleteCookie } from "./utility";
 
 function App() {
-  const [userID, setUserID] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [userInfo, setUserInfo] = useState({});
+  const [userID, setUserID] = useState();
   const [posted, setPosted] = useState(false);
-
-  const authToken = async (user) => {
-    var response = await axios.post("http://127.0.0.1:5000/", {
-      username: user,
-    });
-    return response.data;
-  };
-
-  const checkToken = async () => {
-    var token = getToken();
-    var response = await axios.post("http://127.0.0.1:5000/auth/token", {
-      token: token,
-    });
-    return response.data;
-  };
-
-  const getUserInfo = async (id) => {
-    var response = await axios.get(`http://127.0.0.1:9000/users/${id}`, {
-      headers: {
-        access_token: getToken(),
-      },
-    });
-    return response.data;
-  };
+  const [authStatus, setAuthStatus] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const redirectLogin = () => {
     const currentURL = window.location.origin;
     window.location.href = `${configData.authUrl}/auth?redirectURL=${currentURL}`;
   };
 
-  useEffect(async () => {
-    var session_id = new URLSearchParams(window.location.search).get("user");
+  useEffect(() => {
+    var session_id = getCookie("sessionID");
 
     if (session_id) {
-      var auth_response = await authToken(session_id);
-      if (auth_response.auth === false) {
-        console.log("redirect-> reason: unvalid session id");
-        redirectLogin();
-      } else {
-        setToken(auth_response.token);
-        setIsLoading(false);
-        const user_info = await getUserInfo(auth_response.user_id);
-        setUserInfo(user_info.user);
-        return;
-      }
+      axios
+        .post(`${configData.authUrl}/`, {
+          session: session_id,
+        })
+        .then((response) => {
+          if (response.data.auth === false) {
+            deleteCookie("sessionID");
+            deleteCookie("access_token");
+            redirectLogin();
+          } else {
+            setCookie("access_token", response.data.token);
+            setAuthStatus(true);
+            setUserID(response.data.user_id);
+            setIsAdmin(response.data.isAdmin);
+            setIsLoading(false);
+          }
+        });
     } else {
-      var cookie_token = getToken();
-      if (cookie_token) {
-        console.log("cookie found");
-        var token_response = await checkToken();
-        if (token_response.valid === true) {
-          console.log("success from cache");
-          setIsLoading(false);
-          //const user_info = await getUserInfo(token_response.user_id);  //DOES NOT SHOW DATA WHEN GET TOKEN FROM COOKIE
-          //setUserInfo(user_info.user);
-        } else {
-          console.log("redirect-> reason: unvalid token");
-          resetToken();
-          redirectLogin();
-        }
-      } else {
-        console.log("redirect-> reason: empty cookie");
-        redirectLogin();
-      }
+      redirectLogin();
     }
   }, []);
+
+  useEffect(() => {
+    if (userID) {
+      var cookie_token = getCookie("access_token");
+      axios
+        .get(`${configData.apiUrl}/users/${userID}`, {
+          headers: {
+            access_token: cookie_token,
+          },
+        })
+        .then((response) => {
+          setUserInfo(response.data.user);
+          console.log("USER: ", response.data.user);
+        })
+        .catch((error) => {
+          setIsError(true);
+        });
+    }
+  }, [userID]);
+
+  useEffect(() => {
+    if (isAdmin === true) {
+      setTimeout(() => {
+        alert("You're admin. Redirection to user module");
+        window.location.href = "http://127.0.0.1:9010";
+      }, 1200);
+    }
+  }, [isAdmin]);
 
   return (
     <>

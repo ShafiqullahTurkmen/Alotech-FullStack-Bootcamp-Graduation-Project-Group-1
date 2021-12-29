@@ -1,17 +1,16 @@
 import Cookies from "universal-cookie";
 
-export function setToken(token, key = "access_token") {
+export function setCookie(key, cookie) {
   const cookies = new Cookies();
-  cookies.set(key, token, { path: "/" });
+  cookies.set(key, cookie, { path: "/" });
 }
 
-export function getToken(key = "access_token") {
+export function getCookie(key) {
   const cookies = new Cookies();
   return cookies.get(key);
 }
 
-export function resetToken(key = "access_token") {
+export function deleteCookie(key) {
   const cookies = new Cookies();
-  setToken(undefined);
   cookies.remove(key);
 }

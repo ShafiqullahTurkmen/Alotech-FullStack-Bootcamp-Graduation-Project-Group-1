@@ -15,9 +15,9 @@
     "universal-cookie": "^4.0.4",
     "web-vitals": "^2.1.2"
   },
-  "proxy": "http://127.0.0.1:9000/",
+  "proxy": "http://127.0.0.1:9005/",
   "scripts": {
-    "start": "set PORT=3005 && react-scripts start",
+    "start": "set PORT=9010 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

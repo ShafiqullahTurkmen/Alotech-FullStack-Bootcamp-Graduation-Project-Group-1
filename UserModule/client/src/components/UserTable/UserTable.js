@@ -6,27 +6,13 @@ function UserTable({ users, posted, setPosted }) {
     <Table responsive>
       <thead>
         <tr>
-          <th scope="col" className="border-0 text-uppercase font-medium pl-4">
-            ID
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Username
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Name
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Surname
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Email
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Role
-          </th>
-          <th scope="col" className="border-0 text-uppercase font-medium">
-            Edit / Delete
-          </th>
+          <th scope="col">ID</th>
+          <th scope="col">Username</th>
+          <th scope="col">Name</th>
+          <th scope="col">Surname</th>
+          <th scope="col">Email</th>
+          <th scope="col">Role</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>

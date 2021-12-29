@@ -18,12 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("test 9000");
+  res.send("test 9005");
 });
 
 app.use("/users", userRoute);
 
-const PORT = process.env.PORT || 9000;
+const PORT = process.env.PORT || 9005;
 db.sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

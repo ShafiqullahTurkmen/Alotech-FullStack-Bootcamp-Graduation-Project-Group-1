@@ -6,9 +6,9 @@ const sequelize = db.sequelize;
 
 const authorization = async (req, res) => {
   const [value, meta] = await sequelize.query(
-    "SELECT token, user_id FROM tokens WHERE user_id = (SELECT id FROM users WHERE username = :_username)",
+    "SELECT token, user_id FROM tokens WHERE session = :_session",
     {
-      replacements: { _username: req.body.username },
+      replacements: { _session: req.body.session },
     }
   );
 

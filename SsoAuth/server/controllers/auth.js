@@ -1,16 +1,15 @@
 const db = require("../models");
-const requesIp = require("request-ip");
 const CryptoJS = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const sessionGen = require("nanoid");
 
 const Token = db.Token;
 const sequelize = db.sequelize;
 
 const services = [
-  "http://127.0.0.1:3005",
-  "http://localhost:3005",
+  "http://127.0.0.1:3010",
   "http://127.0.0.1:9010",
-  "http://localhost:9010",
+  "http://127.0.0.1:5000",
 ];
 
 const loginUser = async (req, res) => {
@@ -28,8 +27,13 @@ const loginUser = async (req, res) => {
 
   const loginUser = user[0];
 
+  console.log("loginUser", loginUser);
+
   let salt_password = user_password + process.env.SALT_PASS;
   let user_password_hash = CryptoJS.SHA256(salt_password).toString();
+
+  console.log("SALT", salt_password);
+  console.log("USER PASSWORD HASH", user_password_hash);
 
   if (user_password_hash !== loginUser.user_password) {
     return res.json({ auth: false, msg: "wrong password" });
@@ -44,13 +48,14 @@ const loginUser = async (req, res) => {
   }
 
   const [token_status, token_meta] = await sequelize.query(
-    "SELECT token FROM tokens WHERE user_id = :_user_id",
+    "SELECT token, session FROM tokens WHERE user_id = :_user_id",
     {
       replacements: { _user_id: loginUser.id },
     }
   );
 
   if (token_status.length) {
+    console.log("SESSION FROM DATABASE", token_status[0].session);
     const old_token = token_status[0].token;
     jwt.verify(old_token, process.env.JWT_SECRET, (error, decoded) => {
       if (error) {
@@ -58,15 +63,16 @@ const loginUser = async (req, res) => {
       } else {
         return res.json({
           auth: true,
-          msg: "login success",
+          msg: "session continue",
           user_id: loginUser.id,
+          session: token_status[0].session,
           token: old_token,
         });
       }
     });
   }
 
-  const time_to_live = "1d";
+  const time_to_live = "120s";
   const isAdmin = loginUser.user_type === "admin";
 
   const token = jwt.sign(
@@ -81,13 +87,16 @@ const loginUser = async (req, res) => {
 
   const user_ip =
     req.headers["x-forwarded-for"] || req.connection.remoteAddress || "0.0.0.0";
+
   const createdAt = new Date(Date.now() + 3 * 60 * 60 * 1000);
   const source_url = redirectURL;
   const expires = d.toString();
+  const session = sessionGen.nanoid();
 
   Token.createToken(
     loginUser.id,
     token,
+    session,
     expires,
     createdAt,
     time_to_live,
@@ -95,17 +104,18 @@ const loginUser = async (req, res) => {
     source_url
   );
 
-  return res.status(201).json({
+  return res.json({
     auth: true,
-    msg: "login success",
+    msg: "new session",
     user_id: loginUser.id,
+    session: session,
     token: token,
   });
 };
 
 const getLoginPage = (req, res) => {
   const redirectURL = req.query.redirectURL;
-  res.redirect(`http://127.0.0.1:3000?redirectURL=${redirectURL}`); //redirect sso auth login page
+  res.redirect(`http://127.0.0.1:3010?redirectURL=${redirectURL}`);
 };
 
 module.exports = {
