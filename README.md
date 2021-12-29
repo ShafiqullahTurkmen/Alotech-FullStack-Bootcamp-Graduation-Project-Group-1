@@ -23,7 +23,7 @@ If a user visits an `consumer` or `user module`-protected service (`foo.sso.exam
 #### - Clone Project
 
 ```bash
-gh repo clone Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-Graduation-Project-Group-1
+git clone repo clone Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-Graduation-Project-Group-1
 ```
 
 #### - Install dependencies in:
@@ -64,7 +64,9 @@ gh repo clone Alotech-Bootcamp-Grad-Project-Group-1/Alotech-FullStack-Bootcamp-G
   npm start
 ```
 
-#### -  Visit `localhost:9010`
+#### -  Visit `http://127.0.0.1:3010/?redirectURL=http://127.0.0.1:9010`
+
+> After running the tests, username: `admin` and password `admin` can be used to log in
 
 --- 
 
